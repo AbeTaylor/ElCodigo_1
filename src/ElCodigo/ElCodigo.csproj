@@ -44,6 +44,10 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sitecore.Client">
+      <HintPath>..\..\..\..\..\..\..\..\inetpub\wwwroot\traincore\Website\bin\Sitecore.Client.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sitecore.Kernel, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\inetpub\wwwroot\traincore\Website\bin\Sitecore.Kernel.dll</HintPath>
@@ -67,17 +71,22 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomButtons\Editor\ContentEditor.cs" />
     <Compile Include="CustomButtons\Favorites\AddToFavorites.cs" />
     <Compile Include="CustomButtons\Favorites\GoToFavorite.cs" />
+    <Compile Include="CustomButtons\Favorites\OpenItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\Favorites.config" />
+    <Content Include="App_Config\Include\Favorites.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\ElCodigo_1.pubxml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
