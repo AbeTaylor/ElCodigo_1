@@ -23,9 +23,12 @@ namespace ElCodigo.CustomButtons.Editor
                 if (item.TemplateID.ToString().Equals("{F52BCA1A-0A34-46DC-AE5F-B3BB97389F75}"))
                 {
                     string itemId = item.Fields["FavoriteItem"].Value;
-                    string load = String.Concat(new object[] { "item:load(id=", itemId, ",language=", Language.Parse(this.ContentEditorDataContext.Language.ToString()), ")" });
-                    Sitecore.Context.ClientPage.SendMessage(this, load);
-                    return;
+                    if (!String.IsNullOrWhiteSpace(itemId))
+                    {
+                        string load = String.Concat(new object[] { "item:load(id=", itemId, ",language=", Language.Parse(this.ContentEditorDataContext.Language.ToString()), ")" });
+                        Sitecore.Context.ClientPage.SendMessage(this, load);
+                        return;
+                    }
                 }
             }
             base.HandleMessage(message);
