@@ -20,6 +20,13 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>12.0</OldToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +47,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sitecore.Client">
       <HintPath>..\..\..\..\..\..\..\..\inetpub\wwwroot\traincore\Website\bin\Sitecore.Client.dll</HintPath>
       <Private>False</Private>
@@ -68,8 +79,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomButtons\Editor\ContentEditor.cs" />
+    <Compile Include="CustomButtons\Events\CreateFavoriteFolderProcessor.cs" />
     <Compile Include="CustomButtons\Favorites\AddToFavorites.cs" />
     <Compile Include="CustomButtons\Favorites\GoToFavorite.cs" />
+    <Compile Include="CustomButtons\Helper\FavoritesHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,7 +93,6 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\ElCodigo_1.pubxml" />
-    <None Include="Properties\PublishProfiles\will.pubxml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
