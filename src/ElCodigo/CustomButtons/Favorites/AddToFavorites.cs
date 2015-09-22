@@ -1,10 +1,7 @@
-﻿using Sitecore.Data;
+﻿using ElCodigo.CustomButtons.Helper;
+using Sitecore.Data;
 using Sitecore.Data.Items;
-using Sitecore.Diagnostics;
-using Sitecore.Pipelines.InsertRenderings.Processors;
-using Sitecore.Security.AccessControl;
 using Sitecore.Security.Accounts;
-using Sitecore.Shell;
 using Sitecore.Shell.Framework.Commands;
 using System.Linq;
 
@@ -12,6 +9,7 @@ namespace ElCodigo.CustomButtons.Favorites
 {
     public class AddToFavorites : Command
     {
+        private string _favoriteContainerId = "{871D33CC-00C7-4CAA-A293-6D81B0D2C0AD}";
         private string _favoriteTemplateId = "{F52BCA1A-0A34-46DC-AE5F-B3BB97389F75}";
         private string _favoriteItemField = "FavoriteItem";
 
@@ -27,42 +25,7 @@ namespace ElCodigo.CustomButtons.Favorites
                 return;
             }
 
-            //TODO break down code into executable chunks
-            //Get the context Item
-            Role everyone = Role.FromName("sitecore\\Sitecore Client Users");
-            var item = context.Items[0];
-            User curUser = User.Current;
-            var FavoriteContainer = item.Database.GetItem("{871D33CC-00C7-4CAA-A293-6D81B0D2C0AD}");
-                     
-            if (InFavoritesItem(FavoriteContainer, item.ID.ToString())) return;
-
-            var newFavoriteItem = FavoriteContainer.Add(item.Name, new TemplateID(new ID(_favoriteTemplateId)));
-            newFavoriteItem.Editing.BeginEdit();
-            newFavoriteItem.Fields["FavoriteItem"].Value = item.ID.ToString();
-            newFavoriteItem.Appearance.Icon = item.Appearance.Icon;            
-            AccessRuleCollection accessRules = newFavoriteItem.Security.GetAccessRules();
-            accessRules.Helper.AddAccessPermission(
-                curUser, 
-                AccessRight.ItemRead, 
-                PropagationType.Any, 
-                AccessPermission.Allow);
-            accessRules.Helper.AddAccessPermission(
-                everyone,
-                AccessRight.ItemRead,
-                PropagationType.Any,
-                AccessPermission.Deny
-                );
-            newFavoriteItem.Security.SetAccessRules(accessRules);
-            
-            newFavoriteItem.Editing.EndEdit();
-
-            //Ignore for now
-            //var favorites = UserOptions.Favorites.Root;
-
-            ////Get User, Set favorite item, save user profile
-            //User user = Sitecore.Context.User;
-            //user.Profile.SetCustomProperty("UserFavorite", item.ID.ToString());
-            //user.Profile.Save();
+            CreateFavoriteItem(context.Items[0]);
         }
 
         public override CommandState QueryState(CommandContext context)
@@ -74,30 +37,42 @@ namespace ElCodigo.CustomButtons.Favorites
 
             var item = context.Items[0];
 
-            if (item.Database.Name.ToLower().Equals("web") || item.Database.Name.ToLower().Equals("core") || item.ID.ToString().Equals("{871D33CC-00C7-4CAA-A293-6D81B0D2C0AD}") || item.Axes.GetAncestors().Any(x => x.ID.ToString().Equals("{871D33CC-00C7-4CAA-A293-6D81B0D2C0AD}")))
+            if (item.Database.Name.ToLower().Equals("web") || item.Database.Name.ToLower().Equals("core") || item.ID.ToString().Equals(_favoriteContainerId) || item.Axes.GetAncestors().Any(x => x.ID.ToString().Equals(_favoriteContainerId)))
             {
                 return CommandState.Hidden;
             }
 
-            var FavoriteContainer = item.Database.GetItem("{871D33CC-00C7-4CAA-A293-6D81B0D2C0AD}");
+            var favoriteContainer = item.Database.GetItem(_favoriteContainerId);
 
-            if (FavoriteContainer == null)
+            if (favoriteContainer == null)
             {
                 return CommandState.Hidden;
             }
-            
-            if (InFavoritesItem(FavoriteContainer, item.ID.ToString()))
+
+            if (FavoritesItemExists(favoriteContainer, item.ID.ToString()))
             {
                 return CommandState.Disabled;
             }
-            
-            
+
+
             return CommandState.Enabled;
         }
 
-        private bool InFavoritesItem(Item FavoriteContainer, string itemId)
+        public bool FavoritesItemExists(Item favoriteContainer, string itemId)
         {
-            return FavoriteContainer.Axes.GetDescendants().Where(x => x.Security.CanRead(User.Current) && x.TemplateID.Equals(new ID(_favoriteTemplateId))).Any(y => y.Fields[_favoriteItemField].Value.Equals(itemId));
+            return favoriteContainer.Axes.GetDescendants().Where(x => x.Security.CanRead(User.Current) && x.TemplateID.Equals(new ID(_favoriteTemplateId))).Any(y => y.Fields[_favoriteItemField].Value.Equals(itemId));
+        }
+
+        private void CreateFavoriteItem(Item contextItem)
+        {
+            var favoriteContainer = contextItem.Database.GetItem(_favoriteContainerId);
+
+            var favoriteItem = favoriteContainer.Add(contextItem.Name, new TemplateID(new ID(_favoriteTemplateId)));
+            favoriteItem.Editing.BeginEdit();
+            favoriteItem.Fields[_favoriteItemField].Value = contextItem.ID.ToString();
+            favoriteItem.Appearance.Icon = contextItem.Appearance.Icon;
+            FavoritesHelper.SetItemSecurity(favoriteItem);
+            favoriteItem.Editing.EndEdit();
         }
     }
 }

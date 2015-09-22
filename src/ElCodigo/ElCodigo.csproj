@@ -82,7 +82,7 @@
     <Compile Include="CustomButtons\Events\CreateFavoriteFolderProcessor.cs" />
     <Compile Include="CustomButtons\Events\DeleteCheck.cs" />
     <Compile Include="CustomButtons\Favorites\AddToFavorites.cs" />
-    <Compile Include="CustomButtons\Favorites\GoToFavorite.cs" />
+    <Compile Include="CustomButtons\Favorites\RemoveFromFavorites.cs" />
     <Compile Include="CustomButtons\Helper\FavoritesHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
