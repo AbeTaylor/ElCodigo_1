@@ -89,6 +89,7 @@
     <Compile Include="CustomButtons\Editor\ContentEditor.cs" />
     <Compile Include="CustomButtons\Events\CreateFavoriteFolderProcessor.cs" />
     <Compile Include="CustomButtons\Events\DeleteCheck.cs" />
+    <Compile Include="CustomButtons\Events\RenameCheck.cs" />
     <Compile Include="CustomButtons\Favorites\AddToFavorites.cs" />
     <Compile Include="CustomButtons\Favorites\RemoveFromFavorites.cs" />
     <Compile Include="CustomButtons\Helper\FavoritesHelper.cs" />
