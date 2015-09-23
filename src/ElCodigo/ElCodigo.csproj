@@ -55,6 +55,14 @@
       <HintPath>..\..\..\..\..\..\..\..\inetpub\wwwroot\traincore\Website\bin\Sitecore.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sitecore.ExperienceEditor">
+      <HintPath>..\..\..\..\..\..\..\..\inetpub\wwwroot\traincore\Website\bin\Sitecore.ExperienceEditor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sitecore.ExperienceEditor.Speak">
+      <HintPath>..\..\..\..\..\..\..\..\inetpub\wwwroot\traincore\Website\bin\Sitecore.ExperienceEditor.Speak.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sitecore.Kernel, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\inetpub\wwwroot\traincore\Website\bin\Sitecore.Kernel.dll</HintPath>
@@ -83,12 +91,16 @@
     <Compile Include="CustomButtons\Favorites\AddToFavorites.cs" />
     <Compile Include="CustomButtons\Favorites\RemoveFromFavorites.cs" />
     <Compile Include="CustomButtons\Helper\FavoritesHelper.cs" />
+    <Compile Include="CustomButtons\Pipeline\GetFavoriteItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Config\Include\Favorites.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="sitecore\shell\Applications\ContentManager\Default.aspx" />
+    <Content Include="sitecore\shell\client\Sitecore\ExperienceEditor\Pages\NavigationTreeView\FavoritesItemTreeview.js" />
+    <Content Include="sitecore\shell\client\Sitecore\Speak\Ribbon\Controls\BreadCrumb\Breadcrumb.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

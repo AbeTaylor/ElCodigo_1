@@ -10,7 +10,7 @@ namespace ElCodigo.CustomButtons.Helper
         public static void SetItemSecurity(Item favoriteItem)
         {
             var arc = new AccessRuleCollection();
-            arc.Helper.AddAccessPermission(Sitecore.Context.User, AccessRight.ItemRead, PropagationType.Entity, AccessPermission.Allow);
+            arc = CreateMultipleAccessRules(Sitecore.Context.User, new AccessRight[] { AccessRight.ItemRead, AccessRight.ItemWrite, AccessRight.ItemRename, AccessRight.ItemDelete, AccessRight.ItemCreate }, AccessPermission.Allow, arc);
             arc = CreateMultipleAccessRules(Role.FromName("sitecore\\Sitecore Client Users"), new AccessRight[] { AccessRight.ItemRead, AccessRight.ItemWrite, AccessRight.ItemRename, AccessRight.ItemDelete }, AccessPermission.Deny, arc);
             favoriteItem.Security.SetAccessRules(arc);
         }
