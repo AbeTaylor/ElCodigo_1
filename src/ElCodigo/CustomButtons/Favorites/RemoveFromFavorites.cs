@@ -42,7 +42,7 @@ namespace ElCodigo.CustomButtons.Favorites
 
             if (_unallowedDbs.Any(db => item.Database.Name.ToLower().Contains(db)))
             {
-                return CommandState.Disabled;
+                return CommandState.Hidden;
             }
 
             var favoritesContainer = item.Database.GetItem(_favoritesContainerId);

@@ -85,15 +85,17 @@ namespace ElCodigo.CustomButtons.Favorites
             favoriteItem.Editing.BeginEdit();
             favoriteItem.Fields[_favoriteItemField].Value = contextItem.ID.ToString();
             favoriteItem.Appearance.Icon = contextItem.Appearance.Icon;
-            FavoritesHelper.SetItemSecurity(favoriteItem);
             favoriteItem.Editing.EndEdit();
         }
 
         private Item CreateUserFolder(Item favoriteContainer)
         {
-            var folder = favoriteContainer.Add(User.Current.Name.Replace("\\","_"), new TemplateID(new ID(_folderTemplateId)));
-            FavoritesHelper.SetItemSecurity(folder);
-            return folder;
+            using (new Sitecore.SecurityModel.SecurityDisabler())
+            {
+                var folder = favoriteContainer.Add(User.Current.Name.Replace("\\", "_"), new TemplateID(new ID(_folderTemplateId)));
+                FavoritesHelper.SetItemSecurity(folder);
+                return folder;
+            }
         }
     }
 }
