@@ -3,6 +3,7 @@ using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Security.Accounts;
 using Sitecore.Shell.Framework.Commands;
+using System;
 using System.Linq;
 
 namespace ElCodigo.CustomButtons.Favorites
@@ -11,6 +12,7 @@ namespace ElCodigo.CustomButtons.Favorites
     {
         private string _favoriteContainerId = "{871D33CC-00C7-4CAA-A293-6D81B0D2C0AD}";
         private string _favoriteTemplateId = "{F52BCA1A-0A34-46DC-AE5F-B3BB97389F75}";
+        private string _folderTemplateId = "{A87A00B1-E6DB-45AB-8B54-636FEC3B5523}";
         private string _favoriteItemField = "FavoriteItem";
 
         /// <summary>
@@ -66,13 +68,32 @@ namespace ElCodigo.CustomButtons.Favorites
         private void CreateFavoriteItem(Item contextItem)
         {
             var favoriteContainer = contextItem.Database.GetItem(_favoriteContainerId);
+            Item userFolder;
 
-            var favoriteItem = favoriteContainer.Add(contextItem.Name, new TemplateID(new ID(_favoriteTemplateId)));
+            var hasUserFolder = favoriteContainer.Children.Any(c => c.Name.Equals(User.Current.Name.Replace("\\", "_")));
+
+            if (!hasUserFolder)
+            {
+                userFolder = CreateUserFolder(favoriteContainer);
+            }
+            else
+            {
+                userFolder = favoriteContainer.Children.First(c => c.Name.Equals(User.Current.Name.Replace("\\", "_")));
+            }
+
+            var favoriteItem = userFolder.Add(contextItem.Name, new TemplateID(new ID(_favoriteTemplateId)));
             favoriteItem.Editing.BeginEdit();
             favoriteItem.Fields[_favoriteItemField].Value = contextItem.ID.ToString();
             favoriteItem.Appearance.Icon = contextItem.Appearance.Icon;
             FavoritesHelper.SetItemSecurity(favoriteItem);
             favoriteItem.Editing.EndEdit();
+        }
+
+        private Item CreateUserFolder(Item favoriteContainer)
+        {
+            var folder = favoriteContainer.Add(User.Current.Name.Replace("\\","_"), new TemplateID(new ID(_folderTemplateId)));
+            FavoritesHelper.SetItemSecurity(folder);
+            return folder;
         }
     }
 }
